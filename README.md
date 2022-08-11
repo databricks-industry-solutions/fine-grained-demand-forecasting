@@ -1,6 +1,6 @@
 # fine-grained-demand-forecasting
 
-[<img src="https://www.databricks.com/wp-content/uploads/2022/03/build-fine-grained-demand-forecasts-ui-hex.png">] 
+<img src="https://www.databricks.com/wp-content/uploads/2022/03/build-fine-grained-demand-forecasts-ui-hex.png">
 
 https://www.databricks.com/solutions/accelerators/demand-forecasting
 
