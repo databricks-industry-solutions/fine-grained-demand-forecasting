@@ -428,20 +428,36 @@ Path(tmp_data_path).mkdir(parents=True, exist_ok=True)
 # MAGIC   training_date date
 # MAGIC   )
 # MAGIC using delta
-# MAGIC partitioned by (training_date);
+# MAGIC partitioned by (date);
 # MAGIC 
 # MAGIC -- load data to it
-# MAGIC insert into forecasts
-# MAGIC select 
-# MAGIC   ds as date,
+# MAGIC merge into forecasts f
+# MAGIC using new_forecasts n 
+# MAGIC on f.date = n.ds and f.store = n.store and f.item = n.item
+# MAGIC when matched then update set f.date = n.ds,
+# MAGIC   f.store = n.store,
+# MAGIC   f.item = n.item,
+# MAGIC   f.sales = n.y,
+# MAGIC   f.sales_predicted = n.yhat,
+# MAGIC   f.sales_predicted_upper = n.yhat_upper,
+# MAGIC   f.sales_predicted_lower = n.yhat_lower,
+# MAGIC   f.training_date = n.training_date
+# MAGIC when not matched then insert (date,
 # MAGIC   store,
 # MAGIC   item,
-# MAGIC   y as sales,
-# MAGIC   yhat as sales_predicted,
-# MAGIC   yhat_upper as sales_predicted_upper,
-# MAGIC   yhat_lower as sales_predicted_lower,
-# MAGIC   training_date
-# MAGIC from new_forecasts;
+# MAGIC   sales,
+# MAGIC   sales_predicted,
+# MAGIC   sales_predicted_upper,
+# MAGIC   sales_predicted_lower,
+# MAGIC   training_date)
+# MAGIC values (n.ds,
+# MAGIC   n.store,
+# MAGIC   n.item,
+# MAGIC   n.y,
+# MAGIC   n.yhat,
+# MAGIC   n.yhat_upper,
+# MAGIC   n.yhat_lower,
+# MAGIC   n.training_date)
 
 # COMMAND ----------
 
