@@ -22,7 +22,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ./config/Data Extract
+# MAGIC %run "./config/Data Extract"
 
 # COMMAND ----------
 
