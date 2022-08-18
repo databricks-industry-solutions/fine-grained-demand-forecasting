@@ -22,6 +22,10 @@ pip install prophet
 
 # COMMAND ----------
 
+# MAGIC %run ./config/Data Extract
+
+# COMMAND ----------
+
 # DBTITLE 1,Access the Dataset
 from pyspark.sql.types import *
 
