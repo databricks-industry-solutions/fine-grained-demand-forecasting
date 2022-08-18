@@ -10,7 +10,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Install Required Libraries
-pip install prophet
+# MAGIC %pip install prophet
 
 # COMMAND ----------
 
