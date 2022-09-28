@@ -44,7 +44,7 @@ job_json = {
                 "job_cluster_key": "FGF_cluster",
                 "libraries": [],
                 "notebook_task": {
-                    "notebook_path": f"1_Fine Grained Demand Forecasting"
+                    "notebook_path": f"1_Python_Fine Grained Demand Forecasting"
                 },
                 "task_key": "FGF_01",
                 "description": ""
