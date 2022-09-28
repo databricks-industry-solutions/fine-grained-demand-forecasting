@@ -48,7 +48,45 @@ job_json = {
                 },
                 "task_key": "FGF_01",
                 "description": ""
-            }
+            },
+            {
+                "job_cluster_key": "FGF_cluster",
+                "notebook_task": {
+                    "notebook_path": f"2_SparklyR_ Fine Grained Demand Forecasting"
+                },
+                "libraries": [
+                    {
+                        "cran": {
+                            "package": "dplyr"
+                        }
+                    }
+                ],
+                "task_key": "FGF_02",
+                "depends_on": [
+                    {
+                        "task_key": "FGF_01"
+                    }
+                ]
+            },
+            {
+                "job_cluster_key": "FGF_cluster",
+                "notebook_task": {
+                    "notebook_path": f"3_SparkR_ Fine Grained Demand Forecasting"
+                },
+                "libraries": [
+                    {
+                        "cran": {
+                            "package": "dplyr"
+                        }
+                    }
+                ],
+                "task_key": "FGF_03",
+                "depends_on": [
+                    {
+                        "task_key": "FGF_02"
+                    }
+                ]
+            },
         ],
         "job_clusters": [
             {

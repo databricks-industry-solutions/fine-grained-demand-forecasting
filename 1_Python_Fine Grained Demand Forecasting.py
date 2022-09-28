@@ -402,22 +402,6 @@ display(results)
 
 # COMMAND ----------
 
-# DBTITLE 1,Set up user-scoped database location to avoid conflicts
-import re
-from pathlib import Path
-# Creating user-specific paths and database names
-useremail = dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
-username_sql_compatible = re.sub('\W', '_', useremail.split('@')[0])
-tmp_data_path = f"/tmp/fine_grain_forecast/data/{useremail}/"
-database_name = f"fine_grain_forecast_{username_sql_compatible}"
-
-# Create user-scoped environment
-spark.sql(f"CREATE DATABASE IF NOT EXISTS {database_name} LOCATION '{tmp_data_path}'")
-spark.sql(f"USE {database_name}")
-Path(tmp_data_path).mkdir(parents=True, exist_ok=True)
-
-# COMMAND ----------
-
 # DBTITLE 1,Persist Forecast Output
 # MAGIC %sql
 # MAGIC -- create forecast table
