@@ -396,7 +396,7 @@ forecasts <- selectExpr(
     "training_date"
     )
 
-saveAsTable(forecasts, "forecasts", "delta", "append", mergeSchema="true", partitionBy="training_date")
+saveAsTable(forecasts, "forecasts_sparkr", "delta", "append", mergeSchema="true", partitionBy="training_date")
 
 # COMMAND ----------
 
@@ -438,7 +438,7 @@ evaluate_forecast <- function( key, evaluation_df ) {
   }
  
 # calculate metrics for each store-item combination
-forecasts <- tableToDF("forecasts")
+forecasts <- tableToDF("forecasts_sparkr")
 forecasts <- filter(forecasts, forecasts$training_date==SparkR::current_date())
 
 eval_results <- SparkR::gapply(filter(forecasts, forecasts$date<ymd("2018-01-01")), cols = (c('training_date','store', 'item')), evaluate_forecast, schema = eval_schema)
@@ -477,7 +477,7 @@ saveAsTable(forecast_evals, "forecast_evals", "delta", "append", mergeSchema="tr
 # MAGIC   sales_predicted,
 # MAGIC   sales_predicted_upper,
 # MAGIC   sales_predicted_lower
-# MAGIC FROM forecasts a
+# MAGIC FROM forecasts_sparkr a
 # MAGIC WHERE item = 1 AND
 # MAGIC       store IN (1, 2, 3) AND
 # MAGIC       date >= '2018-02-01' AND
