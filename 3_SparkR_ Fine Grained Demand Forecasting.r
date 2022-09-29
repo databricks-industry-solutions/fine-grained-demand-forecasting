@@ -460,7 +460,7 @@ forecast_evals <- selectExpr(
     "training_date"
     )
 
-saveAsTable(forecast_evals, "forecast_evals", "delta", "append", mergeSchema="true", partitionBy="training_date")
+saveAsTable(forecast_evals, "forecast_evals_sparkr", "delta", "append", mergeSchema="true", partitionBy="training_date")
 
 # COMMAND ----------
 
@@ -498,7 +498,7 @@ saveAsTable(forecast_evals, "forecast_evals", "delta", "append", mergeSchema="tr
 # MAGIC   mae,
 # MAGIC   mse,
 # MAGIC   rmse
-# MAGIC FROM forecast_evals a
+# MAGIC FROM forecast_evals_sparkr a
 # MAGIC WHERE item = 1 AND
 # MAGIC       training_date=current_date()
 # MAGIC ORDER BY store
