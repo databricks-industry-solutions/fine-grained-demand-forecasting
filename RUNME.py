@@ -52,7 +52,7 @@ job_json = {
             {
                 "job_cluster_key": "FGF_cluster",
                 "notebook_task": {
-                    "notebook_path": f"2_SparklyR_ Fine Grained Demand Forecasting"
+                    "notebook_path": f"2_SparklyR_Fine Grained Demand Forecasting"
                 },
                 "libraries": [
                     {
@@ -71,7 +71,7 @@ job_json = {
             {
                 "job_cluster_key": "FGF_cluster",
                 "notebook_task": {
-                    "notebook_path": f"3_SparkR_ Fine Grained Demand Forecasting"
+                    "notebook_path": f"3_SparkR_Fine Grained Demand Forecasting"
                 },
                 "libraries": [
                     {
