@@ -12,8 +12,8 @@
 # COMMAND ----------
 
 # DBTITLE 1,Install Packages
-install.packages("prophet",  repos = "https://mran.microsoft.com/")
-install.packages("Metrics")
+install.packages("prophet",  repos = "https://mran.microsoft.com/", quiet=TRUE)
+install.packages("Metrics", quiet=TRUE)
 
 # COMMAND ----------
 

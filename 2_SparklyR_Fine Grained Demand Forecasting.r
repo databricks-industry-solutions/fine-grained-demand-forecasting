@@ -13,11 +13,11 @@
 
 # DBTITLE 1,Install Packages
 Sys.setenv(LIBARROW_BINARY = TRUE)
-install.packages("arrow", type = "source", repos = "https://mran.microsoft.com/")
-install.packages("dplyr")
-install.packages("prophet",  repos = "https://mran.microsoft.com/")
-install.packages("lubridate")
-install.packages("Metrics")
+install.packages("arrow", type = "source", repos = "https://mran.microsoft.com/", quiet=TRUE)
+install.packages("dplyr", quiet=TRUE)
+install.packages("prophet",  repos = "https://mran.microsoft.com/", quiet=TRUE)
+install.packages("lubridate", quiet=TRUE)
+install.packages("Metrics", quiet=TRUE)
 
 # COMMAND ----------
 
