@@ -49,7 +49,7 @@ train = spark.read.csv(
   schema=train_schema
   )
 
-# make the dataframe queriable as a temporary view
+# make the dataframe queryable as a temporary view
 train.createOrReplaceTempView('train')
 
 # show data
@@ -57,7 +57,7 @@ display(train)
 
 # COMMAND ----------
 
-# MAGIC %md When performing demand forecasting, we are often interested in general trends and seasonality.  Let's start our exploration by examing the annual trend in unit sales:
+# MAGIC %md When performing demand forecasting, we are often interested in general trends and seasonality.  Let's start our exploration by examining the annual trend in unit sales:
 
 # COMMAND ----------
 
@@ -93,7 +93,7 @@ display(train)
 
 # MAGIC %md Aggregating the data at a weekday level, a pronounced weekly seasonal pattern is observed with a peak on Sunday (weekday 0), a hard drop on Monday (weekday 1) and then a steady pickup over the week heading back to the Sunday high.  This pattern seems to be pretty stable across the five years of observations:
 # MAGIC 
-# MAGIC **UPDATE** As part of the Spark 3 move to the [Proleptic Gregorian calendar](https://databricks.com/blog/2020/07/22/a-comprehensive-look-at-dates-and-timestamps-in-apache-spark-3-0.html), the 'u' option in CAST(DATE_FORMAT(date, 'u') was removed. We are now using 'E to provide us a similiar output.
+# MAGIC **UPDATE** As part of the Spark 3 move to the [Proleptic Gregorian calendar](https://databricks.com/blog/2020/07/22/a-comprehensive-look-at-dates-and-timestamps-in-apache-spark-3-0.html), the 'u' option in CAST(DATE_FORMAT(date, 'u') was removed. We are now using 'E to provide us a similar output.
 
 # COMMAND ----------
 
@@ -403,7 +403,7 @@ display(results)
 
 # COMMAND ----------
 
-# MAGIC %md We we are likely wanting to report on our forecasts, so let's save them to a queriable table structure:
+# MAGIC %md We we are likely wanting to report on our forecasts, so let's save them to a queryable table structure:
 
 # COMMAND ----------
 
@@ -477,7 +477,7 @@ def evaluate_forecast( evaluation_pd: pd.DataFrame ) -> pd.DataFrame:
   store = evaluation_pd['store'].iloc[0]
   item = evaluation_pd['item'].iloc[0]
   
-  # calulate evaluation metrics
+  # calculate evaluation metrics
   mae = mean_absolute_error( evaluation_pd['y'], evaluation_pd['yhat'] )
   mse = mean_squared_error( evaluation_pd['y'], evaluation_pd['yhat'] )
   rmse = sqrt( mse )
@@ -500,7 +500,7 @@ results.createOrReplaceTempView('new_forecast_evals')
 
 # COMMAND ----------
 
-# MAGIC %md Once again, we will likely want to report the metrics for each forecast, so we persist these to a queriable table:
+# MAGIC %md Once again, we will likely want to report the metrics for each forecast, so we persist these to a queryable table:
 
 # COMMAND ----------
 

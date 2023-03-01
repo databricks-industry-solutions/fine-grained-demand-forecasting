@@ -60,7 +60,7 @@ show(train_data)
 
 # COMMAND ----------
 
-# MAGIC %md When performing demand forecasting, we are often interested in general trends and seasonality.  Let's start our exploration by examing the annual trend in unit sales:
+# MAGIC %md When performing demand forecasting, we are often interested in general trends and seasonality.  Let's start our exploration by examining the annual trend in unit sales:
 
 # COMMAND ----------
 
@@ -227,7 +227,7 @@ plot(
 
 # COMMAND ----------
 
-# MAGIC %md Visual inspection is useful, but a better way to evaulate the forecast is to calculate Mean Absolute Error, Mean Squared Error and Root Mean Squared Error values for the predicted relative to the actual values in our set:
+# MAGIC %md Visual inspection is useful, but a better way to evaluate the forecast is to calculate Mean Absolute Error, Mean Squared Error and Root Mean Squared Error values for the predicted relative to the actual values in our set:
 
 # COMMAND ----------
 
@@ -377,7 +377,7 @@ show(results)
 
 # COMMAND ----------
 
-# MAGIC %md We we are likely wanting to report on our forecasts, so let's save them to a queriable table structure:
+# MAGIC %md We we are likely wanting to report on our forecasts, so let's save them to a queryable table structure:
 # MAGIC 
 # MAGIC **NOTE** Using *append* mode with *spark_write_table* requires the target table to exist which is why we've inserted a *CREATE TABLE* statement into the code block. 
 
@@ -429,7 +429,7 @@ evaluate_forecast <- function( evaluation_df ) {
   #load package
   library(Metrics)
   
-  # calulate evaluation metrics
+  # calculate evaluation metrics
   mae = mae( evaluation_df$sales, evaluation_df$sales_predicted )
   mse = mse( evaluation_df$sales, evaluation_df$sales_predicted )
   rmse = sqrt( mse )
@@ -447,7 +447,7 @@ eval_results <- spark_apply(filter(forecasts, date<lubridate::ymd("2018-01-01"))
 
 # COMMAND ----------
 
-# MAGIC %md Once again, we will likely want to report the metrics for each forecast, so we persist these to a queriable table:
+# MAGIC %md Once again, we will likely want to report the metrics for each forecast, so we persist these to a queryable table:
 
 # COMMAND ----------
 
