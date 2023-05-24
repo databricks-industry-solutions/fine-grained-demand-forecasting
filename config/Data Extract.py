@@ -52,6 +52,7 @@ tmp_data_path = f"/tmp/fine_grain_forecast/data/{useremail}/"
 database_name = f"fine_grain_forecast_{username_sql_compatible}"
 
 # Create user-scoped environment
-spark.sql(f"CREATE DATABASE IF NOT EXISTS {database_name} LOCATION '{tmp_data_path}'")
+spark.sql(f"DROP DATABASE IF EXISTS {database_name} CASCADE")
+spark.sql(f"CREATE DATABASE {database_name} LOCATION '{tmp_data_path}'")
 spark.sql(f"USE {database_name}")
 Path(tmp_data_path).mkdir(parents=True, exist_ok=True)
