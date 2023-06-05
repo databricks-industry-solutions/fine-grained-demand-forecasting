@@ -9,15 +9,15 @@
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC 
+# MAGIC
 # MAGIC For this exercise, we will make use of an increasingly popular library for demand forecasting, [Prophet](https://facebook.github.io/prophet/).
-# MAGIC 
+# MAGIC
 # MAGIC **NOTE** R package installation can be a slow process.  (We found the installation of the packages below took a little over 25 minutes on average.) To explore techniques for speeding up R package installs, please check out [this document](https://github.com/marygracemoesta/R-User-Guide/blob/master/Developing_on_Databricks/package_management.md). In addition, you may consider installing some packages from RStudio Package Manager using a *repos* value of *`https://packagemanager.rstudio.com/all/__linux__/focal/latest`*.
 
 # COMMAND ----------
 
 # DBTITLE 1,Install Packages
-install.packages("prophet",  repos = "https://mran.microsoft.com/", quiet=TRUE)
+install.packages("prophet", repos = "https://packagemanager.posit.co/cran/latest", quiet=TRUE)
 install.packages("Metrics", quiet=TRUE)
 
 # COMMAND ----------
@@ -31,9 +31,9 @@ library(Metrics)
 # COMMAND ----------
 
 # MAGIC %md ## Step 1: Examine the Data
-# MAGIC 
+# MAGIC
 # MAGIC For our training dataset, we will make use of 5-years of store-item unit sales data for 50 items across 10 different stores.  This data set is publicly available as part of a past Kaggle competition and can be downloaded with the `./config/Data Extract` notebook with your own Kaggle credentials.
-# MAGIC 
+# MAGIC
 # MAGIC Once downloaded, we can unzip the *train.csv.zip* file and upload the decompressed CSV to */FileStore/demand_forecast/train/* using the file import steps documented [here](https://docs.databricks.com/data/databricks-file-system.html#!#user-interface). With the dataset accessible within Databricks, we can now explore it in preparation for modeling:
 
 # COMMAND ----------
@@ -68,7 +68,7 @@ display(train_data)
 
 # DBTITLE 1,View Yearly Trends
 # MAGIC %sql
-# MAGIC 
+# MAGIC
 # MAGIC SELECT
 # MAGIC   year(date) as year, 
 # MAGIC   sum(sales) as sales
@@ -79,14 +79,14 @@ display(train_data)
 # COMMAND ----------
 
 # MAGIC %md It's very clear from the data that there is a generally upward trend in total unit sales across the stores. If we had better knowledge of the markets served by these stores, we might wish to identify whether there is a maximum growth capacity we'd expect to approach over the life of our forecast.  But without that knowledge and by just quickly eyeballing this dataset, it feels safe to assume that if our goal is to make a forecast a few days, months or even a year out, we might expect continued linear growth over that time span.
-# MAGIC 
+# MAGIC
 # MAGIC Now let's examine seasonality.  If we aggregate the data around the individual months in each year, a distinct yearly seasonal pattern is observed which seems to grow in scale with overall growth in sales:
 
 # COMMAND ----------
 
 # DBTITLE 1,View Monthly Trends
 # MAGIC %sql
-# MAGIC 
+# MAGIC
 # MAGIC SELECT 
 # MAGIC   TRUNC(date, 'MM') as month,
 # MAGIC   SUM(sales) as sales
@@ -102,7 +102,7 @@ display(train_data)
 
 # DBTITLE 1,View Weekday Trends
 # MAGIC %sql
-# MAGIC 
+# MAGIC
 # MAGIC SELECT
 # MAGIC   YEAR(date) as year,
 # MAGIC   (
@@ -134,9 +134,9 @@ display(train_data)
 # COMMAND ----------
 
 # MAGIC %md ## Step 2: Build a Single Forecast
-# MAGIC 
+# MAGIC
 # MAGIC Before attempting to generate forecasts for individual combinations of stores and items, it might be helpful to build a single forecast for no other reason than to orient ourselves to the use of Prophet library.
-# MAGIC 
+# MAGIC
 # MAGIC Our first step is to assemble the historical dataset on which we will train the model:
 
 # COMMAND ----------
@@ -252,9 +252,9 @@ writeLines( paste("\n MAE:", mae , "\n MSE:", mse , "\n RMSE:", rmse) )
 # COMMAND ----------
 
 # MAGIC %md ## Step 3: Scale Forecast Generation
-# MAGIC 
+# MAGIC
 # MAGIC With the mechanics under our belt, let's now tackle our original goal of building numerous, fine-grain models & forecasts for individual store and item combinations.  We will start by assembling sales data at the store-item-date level of granularity:
-# MAGIC 
+# MAGIC
 # MAGIC **NOTE**: The data in this data set should already be aggregated at this level of granularity but we are explicitly aggregating to ensure we have the expected data structure.
 
 # COMMAND ----------
@@ -294,7 +294,7 @@ result_schema <- structType(
 # COMMAND ----------
 
 # MAGIC %md To train the model and generate a forecast we will leverage [*gapply*](https://spark.apache.org/docs/2.0.2/api/R/gapply.html). The gapply function groups data in a dataframe and applies a function to each grouping. 
-# MAGIC 
+# MAGIC
 # MAGIC For the function to be applied to each grouping, we will write a custom function which will train a model and generate a forecast much like what was done previously in this notebook.  This function will return data with a structure as identified in the result schema defined in the previous cell:
 
 # COMMAND ----------
@@ -511,9 +511,9 @@ saveAsTable(forecast_evals, "forecast_evals_sparkr", "delta", "append", mergeSch
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
+# MAGIC
 # MAGIC &copy; 2022 Databricks, Inc. All rights reserved. The source in this notebook is provided subject to the [Databricks License](https://databricks.com/db-license-source).  All included or referenced third party libraries are subject to the licenses set forth below.
-# MAGIC 
+# MAGIC
 # MAGIC | library                                | description             | license    | source                                              |
 # MAGIC |----------------------------------------|-------------------------|------------|-----------------------------------------------------|
 # MAGIC | prophet                                  |Implements a procedure for forecasting time series data based on an additive model |  MIT   | https://cran.r-project.org/web/packages/prophet/index.html                 |
