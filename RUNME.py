@@ -32,6 +32,33 @@ from solacc.companion import NotebookSolutionCompanion
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Before setting up the rest of the accelerator, we need set up a few credentials in order to access Kaggle datasets. Grab an API key for your Kaggle account ([documentation](https://www.kaggle.com/docs/api#getting-started-installation-&-authentication) here). Here we demonstrate using the [Databricks Secret Scope](https://docs.databricks.com/security/secrets/secret-scopes.html) for credential management. 
+# MAGIC
+# MAGIC Copy the block of code below, replace the name the secret scope and fill in the credentials and execute the block. After executing the code, The accelerator notebook will be able to access the credentials it needs.
+# MAGIC
+# MAGIC
+# MAGIC ```
+# MAGIC client = NotebookSolutionCompanion().client
+# MAGIC try:
+# MAGIC   client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/scopes/create", {"scope": "solution-accelerator-cicd"})
+# MAGIC except:
+# MAGIC   pass
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+# MAGIC   "scope": "solution-accelerator-cicd",
+# MAGIC   "key": "kaggle_username",
+# MAGIC   "string_value": "____"
+# MAGIC })
+# MAGIC
+# MAGIC client.execute_post_json(f"{client.endpoint}/api/2.0/secrets/put", {
+# MAGIC   "scope": "solution-accelerator-cicd",
+# MAGIC   "key": "kaggle_key",
+# MAGIC   "string_value": "____"
+# MAGIC })
+# MAGIC ```
+
+# COMMAND ----------
+
 job_json = {
         "timeout_seconds": 28800,
         "max_concurrent_runs": 1,
