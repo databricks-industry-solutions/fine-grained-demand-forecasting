@@ -33,7 +33,7 @@ from solacc.companion import NotebookSolutionCompanion
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Before setting up the rest of the accelerator, we need set up a few credentials in order to access Kaggle datasets. Grab an API key for your Kaggle account ([documentation](https://www.kaggle.com/docs/api#getting-started-installation-&-authentication) here). Here we demonstrate using the [Databricks Secret Scope](https://docs.databricks.com/security/secrets/secret-scopes.html) for credential management. 
+# MAGIC Since this accelerator uses data from a Kaggle competition, we need to accept the competition [rules](https://www.kaggle.com/competitions/demand-forecasting-kernels-only/rules) and set up a few credentials in order to access Kaggle datasets. Grab an API key for your Kaggle account ([documentation](https://www.kaggle.com/docs/api#getting-started-installation-&-authentication) here). Here we demonstrate using the [Databricks Secret Scope](https://docs.databricks.com/security/secrets/secret-scopes.html) for credential management. 
 # MAGIC
 # MAGIC Copy the block of code below, replace the name the secret scope and fill in the credentials and execute the block. After executing the code, The accelerator notebook will be able to access the credentials it needs.
 # MAGIC
@@ -56,6 +56,10 @@ from solacc.companion import NotebookSolutionCompanion
 # MAGIC   "string_value": "____"
 # MAGIC })
 # MAGIC ```
+
+# COMMAND ----------
+
+# MAGIC %md In order to access the Kaggle competition data, please 
 
 # COMMAND ----------
 
