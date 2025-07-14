@@ -1,0 +1,26 @@
+# Core data science packages
+pandas>=2.0.0
+numpy>=1.24.0
+prophet>=1.1.5
+
+# Spark and Databricks
+pyspark>=3.4.0
+
+# Visualization
+matplotlib>=3.6.0
+seaborn>=0.12.0
+plotly>=5.17.0
+
+# Utilities
+python-dateutil>=2.8.0
+pytz>=2023.3
+
+# Development and testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.7.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# MLOps
+mlflow>=2.7.0 

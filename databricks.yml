@@ -1,0 +1,95 @@
+bundle:
+  name: fine-grained-demand-forecasting
+
+variables:
+  catalog_name:
+    description: "Unity Catalog name for the demand forecasting solution"
+    default: "dev_demand_forecasting"
+  
+  warehouse_id:
+    description: "Databricks SQL Warehouse ID for serverless compute"
+    default: "9be8079d873b30a6"
+
+  schema_name:
+    description: "Schema name within the catalog"
+    default: "forecasting"
+
+resources:
+  jobs:
+    demand_forecasting_workflow:
+      name: "Fine-Grained Demand Forecasting Pipeline"
+      description: "Scalable demand forecasting using Prophet with Unity Catalog and serverless compute - split into logical components"
+      
+      schedule:
+        quartz_cron_expression: "0 0 2 * * ?" # Daily at 2 AM
+        timezone_id: "UTC"
+        pause_status: "UNPAUSED"
+      
+      email_notifications:
+        on_failure:
+          - ${workspace.current_user.userName}
+      
+      timeout_seconds: 7200  # Increased for multi-notebook workflow
+      max_concurrent_runs: 1
+      
+      tasks:
+        - task_key: "data_generation_setup"
+          description: "Generate synthetic data and setup Unity Catalog infrastructure"
+          timeout_seconds: 1800
+          
+          notebook_task:
+            notebook_path: "./notebooks/01_data_generation_setup.py"
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+        
+        - task_key: "model_training_forecasting"
+          description: "Train Prophet models and generate forecasts using distributed computing"
+          timeout_seconds: 3600
+          depends_on:
+            - task_key: "data_generation_setup"
+          
+          notebook_task:
+            notebook_path: "./notebooks/02_model_training_forecasting.py"
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+        
+        - task_key: "results_analysis_visualization"
+          description: "Analyze forecast results and generate business insights"
+          timeout_seconds: 1800
+          depends_on:
+            - task_key: "model_training_forecasting"
+          
+          notebook_task:
+            notebook_path: "./notebooks/03_results_analysis_visualization.py"
+            base_parameters:
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      root_path: /Workspace/Users/${workspace.current_user.userName}/fine-grained-demand-forecasting-dev
+    variables:
+      catalog_name: "dev_demand_forecasting"
+    
+  staging:
+    mode: development
+    workspace:
+      root_path: /Workspace/Shared/fine-grained-demand-forecasting-staging
+    variables:
+      catalog_name: "staging_demand_forecasting"
+      
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/fine-grained-demand-forecasting-prod
+    variables:
+      catalog_name: "prod_demand_forecasting"
+    run_as:
+      service_principal_name: ${var.service_principal_name}
+
+ 
