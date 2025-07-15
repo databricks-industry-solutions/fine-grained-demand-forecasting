@@ -13,6 +13,9 @@ Traditional forecasting approaches often aggregate demand across locations, prod
 - **Aggregate Approach**: "We'll sell 10,000 units of Product A this month"
 - **Fine-Grained Approach**: "Store 1 will sell 45 units of Product A, Store 2 will sell 67 units, Store 3 will sell 23 units..."
 
+  
+<img width="1038" height="512" alt="Demand_Forecasting_Plotly" src="https://github.com/user-attachments/assets/50877df7-fdc1-4de2-a452-e4e9ac4193fb" />
+
 This granular approach addresses real-world business challenges:
 
 - **Inventory Optimization**: Precise allocation of inventory across locations based on local demand patterns
@@ -39,6 +42,7 @@ Whether you're a data scientist exploring forecasting techniques, a business lea
 This solution scales from hundreds to thousands of store-item combinations, making it suitable for enterprise retail operations, e-commerce platforms, and multi-location businesses seeking to implement their own fine-grained forecasting capabilities.
 
 ## 🚀 Installation
+
 
 ### Recommended: Using Databricks Asset Bundle Editor
 
