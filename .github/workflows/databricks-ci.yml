@@ -112,12 +112,14 @@ jobs:
       - name: Run and monitor workflow
         run: |
           echo "Starting workflow execution..."
-          databricks bundle run demo_workflow --target dev --var="environment=${{ env.DEPLOY_ENV }}"
+          databricks bundle run --target dev --var="environment=${{ env.DEPLOY_ENV }}"
+          echo
 
       - name: Run and monitor production workflow
         run: |
           echo "Starting production workflow execution..."
-          databricks bundle run demo_workflow --target dev --var="environment=${{ env.DEPLOY_ENV }}"
+          databricks bundle run --target dev --var="environment=${{ env.DEPLOY_ENV }}"
+          echo
 
       - name: Cleanup PR deployment
         run: |
