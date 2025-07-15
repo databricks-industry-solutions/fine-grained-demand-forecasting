@@ -115,12 +115,6 @@ jobs:
           databricks bundle run demand_forecasting_workflow --target dev --var="environment=${{ env.DEPLOY_ENV }}"
           echo "Workflow execution completed"
 
-      - name: Run and monitor production workflow
-        run: |
-          echo "Starting production workflow execution..."
-          databricks bundle run demand_forecasting_workflow --target dev --var="environment=${{ env.DEPLOY_ENV }}"
-          echo "Production workflow execution completed"
-
       - name: Cleanup PR deployment
         run: |
           databricks bundle destroy --target dev --var="environment=${{ env.DEPLOY_ENV }}" || true
