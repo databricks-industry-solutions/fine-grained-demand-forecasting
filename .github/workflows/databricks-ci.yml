@@ -36,15 +36,15 @@ jobs:
           echo "token = ${{ secrets.DEPLOY_NOTEBOOK_TOKEN }}" >> ~/.databrickscfg
 
       - name: Validate bundle
-        run: databricks bundle validate
+        run: databricks bundle validate --var="environment=${{ env.DEPLOY_ENV }}"
 
       - name: Run and monitor workflow
         run: |
           echo "Starting workflow execution..."
-          databricks bundle run demo_workflow --target dev
+          databricks bundle run demo_workflow --target dev --var="environment=${{ env.DEPLOY_ENV }}"
           echo
           echo "Workflow execution completed"
 
       - name: Cleanup PR deployment
         run: |
-          databricks bundle destroy --target dev || true
+          databricks bundle destroy --target dev --var="environment=${{ env.DEPLOY_ENV }}" || true
