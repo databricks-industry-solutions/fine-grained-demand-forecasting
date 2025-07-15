@@ -5,10 +5,6 @@ variables:
   catalog_name:
     description: "Unity Catalog name for the demand forecasting solution"
     default: "dev_demand_forecasting"
-  
-  warehouse_id:
-    description: "Databricks SQL Warehouse ID for serverless compute"
-    default: "SQL_WAREHOUSE_ID_GOES_HERE"
 
   schema_name:
     description: "Schema name within the catalog"
