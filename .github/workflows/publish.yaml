@@ -2,7 +2,7 @@ name: publish
 
 on:
   push:
-    branches: [ main, preview ]
+    branches: [ main, preview, feature/modernize-to-2025-standards ]
   workflow_dispatch:
 
 permissions:
