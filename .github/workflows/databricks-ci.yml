@@ -34,6 +34,8 @@ jobs:
           echo "[DEFAULT]" > ~/.databrickscfg
           echo "host = https://e2-demo-field-eng.cloud.databricks.com" >> ~/.databrickscfg
           echo "token = ${{ secrets.DEPLOY_NOTEBOOK_TOKEN }}" >> ~/.databrickscfg
+          # Set default environment to dev
+          echo "DEPLOY_ENV=dev" >> $GITHUB_ENV
 
       - name: Validate bundle
         run: databricks bundle validate --var="environment=${{ env.DEPLOY_ENV }}"

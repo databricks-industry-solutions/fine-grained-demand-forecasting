@@ -10,6 +10,14 @@ variables:
     description: "Schema name within the catalog"
     default: "forecasting"
 
+  environment:
+    description: "Deployment environment (dev, staging, prod)"
+    default: "dev"
+
+  service_principal_name:
+    description: "Service principal for production deployment"
+    default: ""
+
 resources:
   jobs:
     demand_forecasting_workflow:
