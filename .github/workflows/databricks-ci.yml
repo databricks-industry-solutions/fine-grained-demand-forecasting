@@ -25,20 +25,20 @@ jobs:
 
       - name: Set up Databricks CLI
         uses: databricks/setup-cli@main
+
+      - name: Configure Databricks CLI authentication
+        run: |
+          # Set default environment to dev
+          echo "DEPLOY_ENV=dev" >> $GITHUB_ENV
         env:
           DATABRICKS_HOST: 'https://e2-demo-field-eng.cloud.databricks.com'
           DATABRICKS_TOKEN: ${{ secrets.DEPLOY_NOTEBOOK_TOKEN }}
 
-      - name: Configure Databricks CLI authentication
-        run: |
-          echo "[DEFAULT]" > ~/.databrickscfg
-          echo "host = https://e2-demo-field-eng.cloud.databricks.com" >> ~/.databrickscfg
-          echo "token = ${{ secrets.DEPLOY_NOTEBOOK_TOKEN }}" >> ~/.databrickscfg
-          # Set default environment to dev
-          echo "DEPLOY_ENV=dev" >> $GITHUB_ENV
-
       - name: Validate bundle
         run: databricks bundle validate --var="environment=${{ env.DEPLOY_ENV }}"
+        env:
+          DATABRICKS_HOST: 'https://e2-demo-field-eng.cloud.databricks.com'
+          DATABRICKS_TOKEN: ${{ secrets.DEPLOY_NOTEBOOK_TOKEN }}
 
       - name: Run and monitor workflow
         run: |
@@ -46,7 +46,13 @@ jobs:
           databricks bundle run demo_workflow --target dev --var="environment=${{ env.DEPLOY_ENV }}"
           echo
           echo "Workflow execution completed"
+        env:
+          DATABRICKS_HOST: 'https://e2-demo-field-eng.cloud.databricks.com'
+          DATABRICKS_TOKEN: ${{ secrets.DEPLOY_NOTEBOOK_TOKEN }}
 
       - name: Cleanup PR deployment
         run: |
           databricks bundle destroy --target dev --var="environment=${{ env.DEPLOY_ENV }}" || true
+        env:
+          DATABRICKS_HOST: 'https://e2-demo-field-eng.cloud.databricks.com'
+          DATABRICKS_TOKEN: ${{ secrets.DEPLOY_NOTEBOOK_TOKEN }}
