@@ -1,55 +1,80 @@
 # Fine-Grained Demand Forecasting 📈
 
-[![Deploy](https://github.com/user/fine-grained-demand-forecasting/actions/workflows/deploy.yml/badge.svg)](https://github.com/user/fine-grained-demand-forecasting/actions/workflows/deploy.yml)
-[![Template](https://img.shields.io/badge/template-industry--solutions--blueprints-blue)](https://github.com/databricks-industry-solutions/industry-solutions-blueprints)
+[![Deploy](https://github.com/user/fine-grained-demand-forecasting/actions/workflows/databricks-ci.yml/badge.svg)](https://github.com/user/fine-grained-demand-forecasting/actions/workflows/databricks-ci.yml)
 
 A scalable demand forecasting solution built on Databricks using Facebook Prophet, Unity Catalog, and serverless compute. This solution demonstrates modern MLOps practices for retail and supply chain forecasting at the store-item level.
 
-**✨ 2025 Modern Implementation** - Fully compliant with [Databricks Industry Solutions Blueprints](https://github.com/databricks-industry-solutions/industry-solutions-blueprints) template.
+## 🏪 Industry Use Case
 
-## 🚀 Quick Start
+**Fine-grained demand forecasting** represents a paradigm shift from traditional aggregate forecasting approaches. Instead of predicting demand at a high level (e.g., total company sales), fine-grained forecasting generates predictions for specific combinations of dimensions—in this case, **store-item level forecasting**.
 
-1. **Prerequisites**
+### Why Fine-Grained Forecasting Matters
+
+Traditional forecasting approaches often aggregate demand across locations, products, or time periods, losing critical nuances:
+
+- **Aggregate Approach**: "We'll sell 10,000 units of Product A this month"
+- **Fine-Grained Approach**: "Store 1 will sell 45 units of Product A, Store 2 will sell 67 units, Store 3 will sell 23 units..."
+
+This granular approach addresses real-world business challenges:
+
+- **Inventory Optimization**: Precise allocation of inventory across locations based on local demand patterns
+- **Supply Chain Efficiency**: Targeted procurement and distribution strategies for each store-product combination
+- **Revenue Protection**: Early identification of demand shifts at specific locations before they impact overall performance
+- **Cost Reduction**: Elimination of safety stock inefficiencies caused by demand aggregation
+
+### An Open-Source Approach to Complex Forecasting
+
+This solution serves as **one inspirational approach** to tackle the technical challenges of fine-grained demand forecasting. The retail industry faces this problem universally, but solutions vary widely based on:
+
+- **Scale Requirements**: From hundreds to millions of store-item combinations
+- **Data Architecture**: Different approaches to distributed processing and storage
+- **Algorithm Choice**: Prophet, ARIMA, neural networks, or hybrid approaches
+- **Infrastructure**: Cloud-native vs. on-premises, serverless vs. traditional compute
+
+**This implementation demonstrates:**
+- How to structure a scalable forecasting pipeline using modern data platforms
+- Practical approaches to distributed time series modeling
+- Real-world considerations for data governance and MLOps
+
+Whether you're a data scientist exploring forecasting techniques, a business leader understanding AI applications, or an engineer architecting similar solutions, this open-source example provides a foundation to build upon and adapt to your specific needs.
+
+This solution scales from hundreds to thousands of store-item combinations, making it suitable for enterprise retail operations, e-commerce platforms, and multi-location businesses seeking to implement their own fine-grained forecasting capabilities.
+
+## 🚀 Installation
+
+### Recommended: Using Databricks Asset Bundle Editor
+
+1. **Clone this repository** to your Databricks workspace:
    ```bash
-   pip install databricks-cli
+   git clone https://github.com/databricks-industry-solutions/fine-grained-demand-forecasting.git
    ```
 
-2. **Configure Databricks**
-   ```bash
-   # Option A: Interactive configuration
-   databricks configure
-   
-   # Option B: Environment file (recommended)
-   cp env.example .env
-   # Edit .env with your Databricks workspace URL, token, and warehouse ID
-   ```
+2. **Open the DAB Editor UI** in your Databricks workspace:
+   - Navigate to the cloned repository folder
+   - Open the `databricks.yml` file
+   - Click "Edit Bundle" to open the visual editor
 
-3. **Deploy Everything**
-   ```bash
-   ./scripts/deploy.sh
-   ```
+3. **Configure and Run** the bundle:
+   - Modify configuration variables as needed (catalog name, schema name, environment)
+   - Click "Validate" to check your configuration
+   - Click "Deploy" to deploy all resources
+   - Click "Run" to execute the demand forecasting workflow
 
-4. **Clean Up When Done**
-   ```bash
-   ./scripts/cleanup.sh
-   ```
+### Alternative: Command Line
 
-## 📊 What Gets Deployed
-
-- **Workflow**: `Fine-Grained Demand Forecasting Pipeline`
-- **Notebooks**: `demand_forecasting_pipeline.ipynb` (Unity Catalog + Prophet forecasting)
-- **Dashboard**: `Fine-Grained Demand Forecasting Dashboard` (real-time insights)
-- **App**: `demand-forecasting-app` (Streamlit interactive explorer)
-- **Location**: `/Workspace/Users/your-email@company.com/fine-grained-demand-forecasting-dev/`
-
-## 🔧 Manual Commands
+If you prefer using the command line:
 
 ```bash
-databricks bundle validate          # Check configuration
-databricks bundle deploy            # Deploy to workspace
-databricks bundle run demand_forecasting_workflow  # Run forecasting
-databricks bundle summary           # See what's deployed
-databricks bundle destroy           # Remove everything
+# Prerequisites
+pip install databricks-cli
+
+# Configure Databricks
+databricks configure
+
+# Deploy and run
+databricks bundle validate
+databricks bundle deploy
+databricks bundle run demand_forecasting_workflow
 ```
 
 ## 🏗️ Project Structure
@@ -57,54 +82,39 @@ databricks bundle destroy           # Remove everything
 ```
 ├── databricks.yml                 # Main DABs configuration
 ├── notebooks/
-│   └── demand_forecasting_pipeline.ipynb  # Main forecasting notebook
-├── dashboards/
-│   └── demand_forecasting_dashboard.lvdash.json  # Real-time dashboard
-├── apps/
-│   └── demand_app/
-│       ├── app.py                 # Streamlit forecasting app
-│       └── app.yaml               # App configuration
-├── src/
-│   └── demand_forecasting/        # Python package for forecasting logic
-│       ├── __init__.py
-│       ├── data_generation.py     # Synthetic data generation
-│       └── forecasting.py         # Prophet-based forecasting
-├── scripts/
-│   ├── deploy.sh                  # Automated deployment
-│   └── cleanup.sh                 # Automated cleanup
+│   ├── 01_data_generation_setup.py      # Data foundation and Unity Catalog setup
+│   ├── 02_model_training_forecasting.py # Prophet model training and forecasting
+│   └── 03_results_analysis_visualization.py # Business insights and visualization
 ├── .github/workflows/
-│   └── deploy.yml                 # CI/CD pipeline
-├── requirements.txt               # Python dependencies
-└── env.example                    # Environment configuration template
+│   ├── databricks-ci.yml         # CI/CD pipeline
+│   └── publish.yaml              # Publishing workflow
+├── scripts/                      # Deployment and utility scripts
+├── requirements.txt              # Python dependencies
+├── env.example                   # Environment configuration template
+└── CONTRIBUTING.md               # Contribution guidelines
 ```
 
-## ✨ Key Features
+## 📊 Forecasting Pipeline
 
-### 🎯 Modern Databricks Architecture
-- **Asset Bundle (DAB) Deployment** - Infrastructure as code with multi-environment support
-- **Unity Catalog Integration** - Enterprise data governance and lineage
-- **Serverless Compute** - Cost-efficient auto-scaling with SQL warehouses and Photon engine
-- **100% Python Implementation** - Eliminated legacy R dependencies
+The solution implements a three-stage forecasting pipeline:
 
-### 📈 Advanced Forecasting
-- **Facebook Prophet Models** - Robust time series forecasting with seasonality detection
-- **Distributed Processing** - Pandas UDFs for scalable store-item level forecasting
-- **Synthetic Data Generation** - No external data dependencies (replaces Kaggle)
-- **Confidence Intervals** - Prediction uncertainty quantification
+### 1. Data Generation & Setup (`01_data_generation_setup.py`)
+- Synthetic sales data generation with realistic seasonal patterns
+- Unity Catalog infrastructure setup (catalog, schema, tables)
+- Data quality validation and governance setup
 
-### 🔄 MLOps Best Practices
-- **CI/CD Pipeline** - Automated testing and multi-stage deployment (dev → staging → prod)
-- **Data Quality Validation** - Automated checks for forecasting readiness
-- **Model Versioning** - Tracked model artifacts and performance metrics
-- **Real-time Dashboards** - Interactive Lakeview dashboards for business users
+### 2. Model Training & Forecasting (`02_model_training_forecasting.py`)
+- Facebook Prophet model training for each store-item combination
+- Distributed processing using Pandas UDFs for scalability
+- Confidence interval generation for uncertainty quantification
+- Forecast results storage in Delta tables
 
-### 🛡️ Enterprise Ready
-- **Role-Based Access Control (RBAC)** - Unity Catalog security integration
-- **Multi-Environment Support** - Development, staging, and production configurations
-- **Audit Logging** - Complete data lineage and governance tracking
-- **Serverless Cost Optimization** - Pay-per-use compute with automatic scaling
+### 3. Results Analysis & Visualization (`03_results_analysis_visualization.py`)
+- Business insights and forecast accuracy metrics
+- Interactive visualizations and trend analysis
+- Executive dashboards and reporting
 
-## 🎛️ Configuration
+## 🔧 Configuration
 
 ### Environment Variables (.env)
 ```bash
@@ -115,53 +125,11 @@ CATALOG_NAME=dev_demand_forecasting
 SCHEMA_NAME=forecasting
 ```
 
-### Databricks Bundle Targets
-- **dev**: Development environment (single-user, personal workspace)
-- **staging**: Staging environment (shared workspace, validation)
-- **prod**: Production environment (service principal, enterprise governance)
-
-## 📊 Forecasting Pipeline
-
-1. **Data Generation**: Synthetic sales data with realistic seasonal patterns, trends, and noise
-2. **Unity Catalog Setup**: Automated catalog, schema, and table creation with optimizations
-3. **Quality Validation**: Data completeness and forecasting readiness checks
-4. **Distributed Forecasting**: Prophet models across store-item combinations using Pandas UDFs
-5. **Results Storage**: Forecast results with confidence intervals stored in Delta tables
-6. **Visualization**: Interactive dashboards and Streamlit apps for forecast exploration
-
-## 🎨 Dashboard & Analytics
-
-The solution includes comprehensive visualization components:
-
-- **Lakeview Dashboard**: Real-time forecast summaries, trends, and accuracy metrics
-- **Streamlit App**: Interactive forecast explorer with filtering and drill-down capabilities
-- **Plotly Visualizations**: Time series plots with confidence intervals and seasonality decomposition
-
-## 🔄 CI/CD Pipeline
-
-Automated GitHub Actions workflow:
-- **Pull Requests**: Validation and testing with isolated workspace paths
-- **Main Branch**: Deployment to development environment
-- **Production**: Scheduled or manual deployment with approval gates
-- **Cleanup**: Automatic resource cleanup when PRs are closed
-
-## 🏪 Use Cases
-
-- **Retail Demand Planning**: Store-level inventory optimization
-- **Supply Chain Forecasting**: Multi-location demand coordination
-- **Revenue Forecasting**: Financial planning and budgeting
-- **Capacity Planning**: Resource allocation and workforce planning
-
-## 🔗 Template Compliance
-
-This solution is fully compliant with the [Databricks Industry Solutions Blueprints](https://github.com/databricks-industry-solutions/industry-solutions-blueprints) template, ensuring:
-
-- ✅ Standard DAB structure and configuration
-- ✅ Jupyter notebook format (.ipynb)
-- ✅ Dashboard and app deployment
-- ✅ Automated deployment and cleanup scripts
-- ✅ Environment configuration templates
-- ✅ CI/CD pipeline integration
+### Key Configuration Options
+- **Catalog Name**: Unity Catalog name for data governance
+- **Schema Name**: Database schema for forecasting tables
+- **Environment**: Deployment environment (dev/staging/prod)
+- **Forecast Horizon**: Number of days to forecast ahead (configurable)
 
 ## 🤝 Contributing
 
@@ -184,4 +152,4 @@ For issues and questions:
 
 ---
 
-**Built with ❤️ using Databricks Asset Bundles, Unity Catalog, and Prophet** | *Modernized for 2025*
+**Built with ❤️ using Databricks Asset Bundles, Unity Catalog, and Prophet**
