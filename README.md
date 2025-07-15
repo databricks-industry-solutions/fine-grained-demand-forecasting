@@ -1,7 +1,5 @@
 # Fine-Grained Demand Forecasting 📈
 
-[![Deploy](https://github.com/user/fine-grained-demand-forecasting/actions/workflows/databricks-ci.yml/badge.svg)](https://github.com/user/fine-grained-demand-forecasting/actions/workflows/databricks-ci.yml)
-
 A scalable demand forecasting solution built on Databricks using Facebook Prophet, Unity Catalog, and serverless compute. This solution demonstrates modern MLOps practices for retail and supply chain forecasting at the store-item level.
 
 ## 🏪 Industry Use Case
