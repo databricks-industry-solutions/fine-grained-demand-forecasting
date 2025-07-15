@@ -79,18 +79,18 @@ print("📚 Libraries imported successfully")
 catalog_name = dbutils.widgets.get("catalog_name") if dbutils.widgets.get("catalog_name") else "dev_demand_forecasting"
 schema_name = dbutils.widgets.get("schema_name") if dbutils.widgets.get("schema_name") else "forecasting"
 
-# Data generation parameters
-NUM_STORES = 10
-NUM_ITEMS = 50
-START_DATE = '2019-01-01'
-END_DATE = '2024-12-31'
+# Data generation parameters - optimized for faster execution
+NUM_STORES = 5   # Reduced from 10 for faster processing
+NUM_ITEMS = 25   # Reduced from 50 for faster processing
+START_DATE = '2020-01-01'
+END_DATE = '2025-7-31'
 
-print("🔧 Retail Business Scope:")
+print("🔧 Retail Business Scope (Optimized):")
 print(f"   🏪 Store locations: {NUM_STORES}")
 print(f"   📦 Product SKUs per store: {NUM_ITEMS}")
 print(f"   📅 Historical sales period: {START_DATE} to {END_DATE}")
 print(f"   📊 Total data points: {NUM_STORES * NUM_ITEMS * 2190:,} sales records")
-print(f"   ⚡ Processing: Cloud-native auto-scaling")
+print(f"   ⚡ Processing: Cloud-native auto-scaling (optimized for speed)")
 
 # Set up Spark session
 spark = SparkSession.builder.getOrCreate()

@@ -8,7 +8,7 @@ variables:
   
   warehouse_id:
     description: "Databricks SQL Warehouse ID for serverless compute"
-    default: "9be8079d873b30a6"
+    default: "SQL_WAREHOUSE_ID_GOES_HERE"
 
   schema_name:
     description: "Schema name within the catalog"
@@ -19,11 +19,6 @@ resources:
     demand_forecasting_workflow:
       name: "Fine-Grained Demand Forecasting Pipeline"
       description: "Scalable demand forecasting using Prophet with Unity Catalog and serverless compute - split into logical components"
-      
-      schedule:
-        quartz_cron_expression: "0 0 2 * * ?" # Daily at 2 AM
-        timezone_id: "UTC"
-        pause_status: "UNPAUSED"
       
       email_notifications:
         on_failure:

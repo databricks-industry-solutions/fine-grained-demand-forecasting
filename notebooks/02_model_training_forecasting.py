@@ -4,10 +4,11 @@
 # MAGIC 
 # MAGIC ## 🤖 Advanced Analytics Solution
 # MAGIC 
-# MAGIC Transform your retail operations with **intelligent demand prediction** that learns from historical patterns:
+# MAGIC Transform your retail operations with **intelligent demand prediction** 
+# MAGIC that learns from historical patterns:
 # MAGIC - **AI-driven forecasting** across thousands of store-product combinations
-# MAGIC - **Seasonal intelligence** that adapts to holiday patterns and market trends
-# MAGIC - **Risk-aware predictions** with confidence intervals for safety stock planning
+# MAGIC - **Seasonal intelligence** that adapts to holiday patterns and trends
+# MAGIC - **Risk-aware predictions** with confidence intervals for safety stock
 # MAGIC - **Automated model training** that scales to enterprise product catalogs
 # MAGIC 
 # MAGIC ## 📈 Industry Innovation
@@ -21,11 +22,11 @@
 # MAGIC 
 # MAGIC ## 🎯 Smart Forecasting Capabilities
 # MAGIC 
-# MAGIC - **Pattern Recognition**: Automatically detects seasonal, weekly, and daily trends
-# MAGIC - **Demand Volatility Management**: Handles irregular patterns and market disruptions
-# MAGIC - **Uncertainty Quantification**: Provides confidence ranges for inventory planning
+# MAGIC - **Pattern Recognition**: Automatically detects seasonal, weekly, daily trends
+# MAGIC - **Demand Volatility Management**: Handles irregular patterns and disruptions
+# MAGIC - **Uncertainty Quantification**: Provides confidence ranges for inventory
 # MAGIC - **Scale & Performance**: Processes thousands of products simultaneously
-# MAGIC - **Business Intelligence**: Generates actionable insights for supply chain teams
+# MAGIC - **Business Intelligence**: Generates actionable insights for supply chains
 
 # COMMAND ----------
 
@@ -50,11 +51,10 @@ dbutils.library.restartPython()
 
 # DBTITLE 1,Import Required Libraries
 import pandas as pd
-import numpy as np
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, count, max as spark_max, min as spark_min, current_timestamp
 from pyspark.sql.functions import pandas_udf, PandasUDFType
-from pyspark.sql.types import StructType, StructField, DateType, DoubleType, IntegerType, StringType
+from pyspark.sql.types import StructType, StructField, DateType, DoubleType, IntegerType, StringType, TimestampType
 from prophet import Prophet
 from datetime import datetime, timedelta
 import warnings
@@ -69,22 +69,22 @@ print("📚 Libraries imported successfully")
 catalog_name = dbutils.widgets.get("catalog_name") if dbutils.widgets.get("catalog_name") else "dev_demand_forecasting"
 schema_name = dbutils.widgets.get("schema_name") if dbutils.widgets.get("schema_name") else "forecasting"
 
-# Forecasting parameters
-FORECAST_HORIZON_DAYS = 30
+# Forecasting parameters - optimized for faster execution
+FORECAST_HORIZON_DAYS = 15  # Reduced from 30 for faster processing
 MIN_HISTORY_DAYS = 90
 CONFIDENCE_INTERVAL = 0.95
-MODEL_VERSION = "prophet_v1.1.5_serverless"
+MODEL_VERSION = "prophet_v1.1.5_serverless_optimized"
 
 # Process all generated data for comprehensive forecasting
-MAX_STORES = 10   # Match data generation: stores 1-10
-MAX_ITEMS = 50    # Match data generation: items 1-50
+MAX_STORES = 5    # Match data generation: stores 1-5
+MAX_ITEMS = 25    # Match data generation: items 1-25
 
-print("🔧 AI Forecasting Engine Settings:")
+print("🔧 AI Forecasting Engine Settings (Optimized):")
 print(f"   🔮 Forecast horizon: {FORECAST_HORIZON_DAYS} days ahead")
 print(f"   📊 Minimum sales history: {MIN_HISTORY_DAYS} days")
 print(f"   🎯 Prediction confidence: {CONFIDENCE_INTERVAL * 100}%")
 print(f"   🛒 Retail scope: {MAX_STORES} stores × {MAX_ITEMS} products")
-print(f"   🤖 Processing: Intelligent auto-scaling")
+print(f"   🤖 Processing: Intelligent auto-scaling (optimized)")
 
 # Set up Spark session
 spark = SparkSession.builder.getOrCreate()
@@ -328,7 +328,7 @@ for i, row in enumerate(available_combinations):
                 'model_version': MODEL_VERSION
             })
         
-        if (i + 1) % 50 == 0:  # Progress update every 50 combinations
+        if (i + 1) % 25 == 0:  # Progress update every 25 combinations
             print(f"📈 Processed {i + 1}/{len(available_combinations)} combinations...")
             
     except Exception as e:
@@ -337,9 +337,20 @@ for i, row in enumerate(available_combinations):
 
 print(f"✅ Forecasting complete! Generated predictions for {len(set([(f['store'], f['item']) for f in all_forecasts]))} combinations")
 
-# Convert to Spark DataFrame
+# Convert to Spark DataFrame with explicit schema to prevent type inference issues
 if all_forecasts:
-    forecast_df = spark.createDataFrame(all_forecasts)
+    # Define explicit schema to match the Delta table exactly
+    forecast_schema = StructType([
+        StructField("store", IntegerType(), True),
+        StructField("item", IntegerType(), True),
+        StructField("forecast_date", DateType(), True),
+        StructField("yhat", DoubleType(), True),
+        StructField("yhat_lower", DoubleType(), True),
+        StructField("yhat_upper", DoubleType(), True),
+        StructField("model_version", StringType(), True)
+    ])
+    
+    forecast_df = spark.createDataFrame(all_forecasts, schema=forecast_schema)
     forecast_count = forecast_df.count()
     print(f"🔮 Generated {forecast_count:,} individual demand predictions")
 else:
@@ -354,15 +365,15 @@ if forecast_count > 0:
     print("✅ AI-powered demand forecasting completed successfully!")
     
     # Business impact summary
-    unique_combinations = forecasts.select("store", "item").distinct().count()
-    date_range = forecasts.select(spark_min("forecast_date"), spark_max("forecast_date")).collect()[0]
+    unique_combinations = forecast_df.select("store", "item").distinct().count()
+    date_range = forecast_df.select(spark_min("forecast_date"), spark_max("forecast_date")).collect()[0]
     
     print(f"🛒 Products with AI forecasts: {unique_combinations} store-product combinations")
     print(f"📅 Demand predictions through: {date_range[1]}")
     print(f"📊 Daily predictions per product: {forecast_count // unique_combinations}")
     
     # Sample business forecasts
-    sample_forecasts = forecasts.select("store", "item", "forecast_date", "yhat", "yhat_lower", "yhat_upper").limit(5).collect()
+    sample_forecasts = forecast_df.select("store", "item", "forecast_date", "yhat", "yhat_lower", "yhat_upper").limit(5).collect()
     print("\n📋 Sample demand predictions:")
     for row in sample_forecasts:
         print(f"   Store {row['store']}, Product {row['item']}, {row['forecast_date']}: {row['yhat']:.0f} units (range: {row['yhat_lower']:.0f}-{row['yhat_upper']:.0f})")
@@ -376,12 +387,28 @@ else:
 if forecast_count > 0:
     print("💾 Saving demand forecasts to Unity Catalog...")
     
-    # Add business metadata
+    # Add business metadata with proper timestamp type
     forecasts_with_timestamp = forecast_df.withColumn("created_timestamp", current_timestamp())
+    
+    # Ensure columns are in the exact order expected by the table schema
+    final_forecasts = forecasts_with_timestamp.select(
+        "store",
+        "item", 
+        "forecast_date",
+        "yhat",
+        "yhat_lower",
+        "yhat_upper",
+        "model_version",
+        "created_timestamp"
+    )
+    
+    # Validate final schema before save
+    print("🔍 Validating final schema before save...")
+    final_forecasts.printSchema()
     
     # Save to table
     forecast_table = f"{catalog_name}.{schema_name}.forecast_results"
-    forecasts_with_timestamp.write.mode("overwrite").saveAsTable(forecast_table)
+    final_forecasts.write.mode("overwrite").saveAsTable(forecast_table)
     
     print(f"✅ Saved {forecast_count:,} demand predictions to {forecast_table}")
     
