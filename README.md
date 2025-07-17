@@ -1,5 +1,9 @@
 # Fine-Grained Demand Forecasting 📈
 
+[![Databricks](https://img.shields.io/badge/Databricks-Solution_Accelerator-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+[![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-Enabled-00A1C9?style=for-the-badge)](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
+[![Serverless](https://img.shields.io/badge/Serverless-Compute-00C851?style=for-the-badge)](https://docs.databricks.com/en/compute/serverless.html)
+
 A scalable demand forecasting solution built on Databricks using Facebook Prophet, Unity Catalog, and serverless compute. This solution demonstrates modern MLOps practices for retail and supply chain forecasting at the store-item level.
 
 ## 🏪 Industry Use Case
